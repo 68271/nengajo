@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>蛇を作る - おめでたい蛇ゲーム</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <div class="container">
+    <header>
+      <h1>🐍 蛇を作ろう 🐍</h1>
+      <p>自分だけの「おめでたい」蛇を作ってみよう！</p>
+    </header>
+    <main>
+      <div class="form-section">
+        <h2>蛇の情報を入力してください</h2>
+        <form id="snake-form">
+          <div class="form-group">
+            <label for="name">🐍 蛇の名前：</label>
+            <input type="text" id="name" name="name" placeholder="例: 幸運の蛇" required>
+          </div>
+          <div class="form-group">
+            <label for="trait">✨ 蛇の特徴：</label>
+            <input type="text" id="trait" name="trait" placeholder="例: 黄金色の体" required>
+            <small class="info">※ 特徴を入力しない場合、自動で補完されます。</small>
+          </div>
+          <p>現在最もめでたい蛇とめでたさで競います。</p>
+          <button type="submit" class="button submit-button">めでたい蛇コンテストにエントリー</button>
+        </form>
+        <div id="result" class="result-display"></div>
+      </div>
+    </main>
+    <footer>
+      <button onclick="location.href='/'" class="button back-button">トップページに戻る</button>
+      <p>STb2000</p>
+    </footer>
+  </div>
+  <script>
+    document.getElementById('snake-form').addEventListener('submit', (e) => {
+      e.preventDefault();
+      const name = document.getElementById('name').value;
+      const trait = document.getElementById('trait').value;
+
+      fetch('/play', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ name, trait })
+      })
+      .then(response => response.json())
+      .then(data => {
+        document.getElementById('result').innerHTML = `<p>🎉 結果: <strong>${data.message}</strong></p>`;
+        document.getElementById('snake-form').reset(); // フォームをリセット
+      });
+    });
+  </script>
+</body>
+</html>
